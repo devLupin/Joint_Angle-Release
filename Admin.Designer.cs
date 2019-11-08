@@ -37,13 +37,14 @@
             this.id_txt = new System.Windows.Forms.TextBox();
             this.measureStart_btn = new System.Windows.Forms.Button();
             this.userResult_btn = new System.Windows.Forms.Button();
+            this.detail_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // set1_radio
             // 
             this.set1_radio.AutoSize = true;
             this.set1_radio.Font = new System.Drawing.Font("굴림", 15F);
-            this.set1_radio.Location = new System.Drawing.Point(153, 124);
+            this.set1_radio.Location = new System.Drawing.Point(96, 124);
             this.set1_radio.Name = "set1_radio";
             this.set1_radio.Size = new System.Drawing.Size(82, 24);
             this.set1_radio.TabIndex = 0;
@@ -55,7 +56,7 @@
             // 
             this.set2_radio.AutoSize = true;
             this.set2_radio.Font = new System.Drawing.Font("굴림", 15F);
-            this.set2_radio.Location = new System.Drawing.Point(241, 124);
+            this.set2_radio.Location = new System.Drawing.Point(218, 124);
             this.set2_radio.Name = "set2_radio";
             this.set2_radio.Size = new System.Drawing.Size(82, 24);
             this.set2_radio.TabIndex = 1;
@@ -79,7 +80,7 @@
             // 
             this.set4_radio.AutoSize = true;
             this.set4_radio.Font = new System.Drawing.Font("굴림", 15F);
-            this.set4_radio.Location = new System.Drawing.Point(417, 124);
+            this.set4_radio.Location = new System.Drawing.Point(449, 124);
             this.set4_radio.Name = "set4_radio";
             this.set4_radio.Size = new System.Drawing.Size(89, 24);
             this.set4_radio.TabIndex = 3;
@@ -91,7 +92,7 @@
             // 
             this.set5_radio.AutoSize = true;
             this.set5_radio.Font = new System.Drawing.Font("굴림", 15F);
-            this.set5_radio.Location = new System.Drawing.Point(512, 124);
+            this.set5_radio.Location = new System.Drawing.Point(568, 124);
             this.set5_radio.Name = "set5_radio";
             this.set5_radio.Size = new System.Drawing.Size(82, 24);
             this.set5_radio.TabIndex = 4;
@@ -103,7 +104,7 @@
             // 
             this.id_label.AutoSize = true;
             this.id_label.Font = new System.Drawing.Font("굴림", 15F);
-            this.id_label.Location = new System.Drawing.Point(143, 239);
+            this.id_label.Location = new System.Drawing.Point(113, 279);
             this.id_label.Name = "id_label";
             this.id_label.Size = new System.Drawing.Size(69, 20);
             this.id_label.TabIndex = 5;
@@ -111,16 +112,15 @@
             // 
             // id_txt
             // 
-            this.id_txt.Location = new System.Drawing.Point(218, 238);
+            this.id_txt.Location = new System.Drawing.Point(188, 278);
             this.id_txt.Name = "id_txt";
-            this.id_txt.PasswordChar = '●';
             this.id_txt.Size = new System.Drawing.Size(100, 21);
             this.id_txt.TabIndex = 6;
             // 
             // measureStart_btn
             // 
             this.measureStart_btn.Font = new System.Drawing.Font("굴림", 15F);
-            this.measureStart_btn.Location = new System.Drawing.Point(343, 214);
+            this.measureStart_btn.Location = new System.Drawing.Point(313, 254);
             this.measureStart_btn.Name = "measureStart_btn";
             this.measureStart_btn.Size = new System.Drawing.Size(126, 67);
             this.measureStart_btn.TabIndex = 7;
@@ -131,7 +131,7 @@
             // userResult_btn
             // 
             this.userResult_btn.Font = new System.Drawing.Font("굴림", 15F);
-            this.userResult_btn.Location = new System.Drawing.Point(499, 214);
+            this.userResult_btn.Location = new System.Drawing.Point(469, 254);
             this.userResult_btn.Name = "userResult_btn";
             this.userResult_btn.Size = new System.Drawing.Size(151, 67);
             this.userResult_btn.TabIndex = 8;
@@ -139,11 +139,23 @@
             this.userResult_btn.UseVisualStyleBackColor = true;
             this.userResult_btn.Click += new System.EventHandler(this.userResult_btn_Click);
             // 
+            // detail_btn
+            // 
+            this.detail_btn.Font = new System.Drawing.Font("굴림", 13F);
+            this.detail_btn.Location = new System.Drawing.Point(208, 172);
+            this.detail_btn.Name = "detail_btn";
+            this.detail_btn.Size = new System.Drawing.Size(330, 40);
+            this.detail_btn.TabIndex = 9;
+            this.detail_btn.Text = "Show the detail picture";
+            this.detail_btn.UseVisualStyleBackColor = true;
+            this.detail_btn.Click += new System.EventHandler(this.detail_btn_Click);
+            // 
             // Admin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.detail_btn);
             this.Controls.Add(this.userResult_btn);
             this.Controls.Add(this.measureStart_btn);
             this.Controls.Add(this.id_txt);
@@ -153,6 +165,8 @@
             this.Controls.Add(this.set3_radio);
             this.Controls.Add(this.set2_radio);
             this.Controls.Add(this.set1_radio);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Admin";
             this.Text = "관절각도 측정";
             this.ResumeLayout(false);
@@ -171,5 +185,6 @@
         private System.Windows.Forms.TextBox id_txt;
         private System.Windows.Forms.Button measureStart_btn;
         private System.Windows.Forms.Button userResult_btn;
+        private System.Windows.Forms.Button detail_btn;
     }
 }

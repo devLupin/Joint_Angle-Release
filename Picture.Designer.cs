@@ -1,6 +1,6 @@
 ﻿namespace JointAngle_combine
 {
-    partial class AngleInfo_user
+    partial class Picture
     {
         /// <summary>
         /// Required designer variable.
@@ -28,36 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.AngleInfo = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.AngleInfo)).BeginInit();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // AngleInfo
+            // pictureBox
             // 
-            this.AngleInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.AngleInfo.Location = new System.Drawing.Point(12, 6);
-            this.AngleInfo.Name = "AngleInfo";
-            this.AngleInfo.RowTemplate.Height = 23;
-            this.AngleInfo.Size = new System.Drawing.Size(1046, 530);
-            this.AngleInfo.TabIndex = 1;
+            this.pictureBox.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(753, 901);
+            this.pictureBox.TabIndex = 0;
+            this.pictureBox.TabStop = false;
             // 
-            // AngleInfo_user
+            // Picture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1064, 548);
-            this.Controls.Add(this.AngleInfo);
+            this.ClientSize = new System.Drawing.Size(777, 925);
+            this.Controls.Add(this.pictureBox);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AngleInfo_user";
-            this.Text = "사용자 관절각도 화면";
-            ((System.ComponentModel.ISupportInitialize)(this.AngleInfo)).EndInit();
+            this.Name = "Picture";
+            this.Text = "Picture";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView AngleInfo;
+        private System.Windows.Forms.PictureBox pictureBox;
     }
 }

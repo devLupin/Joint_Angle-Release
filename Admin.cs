@@ -24,8 +24,39 @@ namespace JointAngle_combine
 
         private void userResult_btn_Click(object sender, EventArgs e)
         {
-            AngleInfo_user user = new AngleInfo_user(id_txt.Text);
-            user.Show();
+            // IF,, not typing id
+            if (id_txt.Text.Length > 1)
+            {
+                AngleInfo_user user = new AngleInfo_user(id_txt.Text);
+                user.Show();
+            }
+            else
+            {
+                MessageBox.Show("아이디를 입력해야 합니다!");
+            }
+        }
+
+        private void detail_btn_Click(object sender, EventArgs e)
+        {
+            int whatPicture = 0;
+            bool chk = true;
+            if (set1_radio.Checked) whatPicture = 1;
+            else if (set2_radio.Checked) whatPicture = 2;
+            else if (set3_radio.Checked) whatPicture = 3;
+            else if (set4_radio.Checked) whatPicture = 4;
+            else if (set5_radio.Checked) whatPicture = 5;
+            else
+            {
+                chk = false;
+                MessageBox.Show("어떤 SET인지 선택해야 합니다.");
+            }
+
+            if (chk)
+            {
+                string picture_path = @"C:\Users\devLupin\Source\Repos\JointAngle_combine\JointAngle_combine\set_pictures\" + whatPicture + ".jpg";
+                Picture picture = new Picture(picture_path);
+                picture.Show();
+            }
         }
 
         string userID;
@@ -49,7 +80,7 @@ namespace JointAngle_combine
 
         private void measureStart_btn_Click(object sender, EventArgs e)
         {
-            bool chk = false;
+            bool chk = true;
 
             string argv = "";
             if (set1_radio.Checked) argv = "SET1";
@@ -57,41 +88,50 @@ namespace JointAngle_combine
             else if (set3_radio.Checked) argv = "SET3";
             else if (set4_radio.Checked) argv = "SET4";
             else if (set5_radio.Checked) argv = "SET5";
+            else
+            {
+                MessageBox.Show("아이디를 입력해야 합니다!");
+                chk = false;
+            }
 
             Database_set();
 
-            using (conn = new MySqlConnection(DB_INFO))
+            // IF,,, not typing id
+            if (chk)
             {
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-                //MessageBox.Show("Server connected");
-                try
+                using (conn = new MySqlConnection(DB_INFO))
                 {
-                    chk = false;
-
-                    string sql = "SELECT * FROM INFO WHERE ID=" + "'" + id_txt.Text + "'";
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
-                    MySqlDataReader rdr = cmd.ExecuteReader();
-
-                    while (rdr.Read())
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+                    //MessageBox.Show("Server connected");
+                    try
                     {
-                        if (rdr["ID"].ToString().Equals(id_txt.Text))
+                        chk = false;
+
+                        string sql = "SELECT * FROM INFO WHERE ID=" + "'" + id_txt.Text + "'";
+                        MySqlCommand cmd = new MySqlCommand(sql, conn);
+                        MySqlDataReader rdr = cmd.ExecuteReader();
+
+                        while (rdr.Read())
                         {
-                            chk = true;
-                            this.userID = id_txt.Text;
-                            break;
+                            if (rdr["ID"].ToString().Equals(id_txt.Text))
+                            {
+                                chk = true;
+                                this.userID = id_txt.Text;
+                                break;
+                            }
                         }
+                        rdr.Close();
                     }
-                    rdr.Close();
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("SELECT * FROM INFO WHERE ID= error!");
+                        MessageBox.Show(ex.Message);
+                        MessageBox.Show(ex.StackTrace);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("SELECT * FROM INFO WHERE ID= error!");
-                    MessageBox.Show(ex.Message);
-                    MessageBox.Show(ex.StackTrace);
-                }
+                conn.Close();
             }
-            conn.Close();
 
             if (chk)
             {

@@ -170,6 +170,8 @@
             this.Controls.Add(this.pw_label);
             this.Controls.Add(this.ID_label);
             this.Controls.Add(this.name_label);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Join";
             this.Text = "회원가입(only for user)";
             this.ResumeLayout(false);

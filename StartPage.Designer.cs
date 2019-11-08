@@ -135,6 +135,7 @@
             this.Controls.Add(this.id_label);
             this.Controls.Add(this.join_btn);
             this.Controls.Add(this.login_btn);
+            this.MaximizeBox = false;
             this.Name = "StartPage_UI";
             this.ResumeLayout(false);
             this.PerformLayout();
