@@ -110,9 +110,10 @@ namespace nuitrack
 
     public class Program
     {
-        static public void Main()
+        static public void Main(string[] argv)
         {
-            Console.CancelKeyPress += delegate {
+            Console.CancelKeyPress += delegate
+            {
                 Nuitrack.Release();
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -121,9 +122,9 @@ namespace nuitrack
             {
                 //if(args.Length < 2)
                 //{
-                   // Application.Exit();
+                // Application.Exit();
                 //}
-                Application.Run(new MainForm("dd"));
+                Application.Run(new MainForm(argv[0], Convert.ToInt32(argv[1])));
             }
             catch (Exception exception)
             {
@@ -203,6 +204,7 @@ namespace nuitrack
         private string DB_INFO;
 
         private string TBL_NAME;
+        private int SET_NUM;
 
         private MySqlConnection conn;
 
@@ -213,12 +215,15 @@ namespace nuitrack
             dbUid = "devLupin";
             dbPwd = "lht1080";
             dbName = "JA_USER_INFO";
-            
+
             DB_INFO = "Data Source=" + dbServer + ";" + "Database=" + dbName + ";" + "User Id=" + dbUid + ";" + "Password=" + dbPwd + ";charset=euckr";
         }
 
-        public MainForm(string user_id)
+        public MainForm(string user_id, int opt)
         {
+            this.TBL_NAME = user_id;
+            this.SET_NUM = opt;
+
             // Initialize Nuitrack. This should be called before using any Nuitrack module.
             // By passing the default arguments we specify that Nuitrack must determine
             // the location automatically.
@@ -348,32 +353,23 @@ namespace nuitrack
             TORSO = 3, WAIST = 4
         }
 
-        /*  // 수정하자
-        int[,] angleInfo = new int[13, 3]
-        {
-            {(int)Info.HEAD, (int)Info.NECK, (int)Info.LEFT_SHOULDER },
-            {(int)Info.NECK, (int)Info.LEFT_SHOULDER,(int)Info.LEFT_ELBOW },
-            {(int)Info.LEFT_SHOULDER, (int)Info.LEFT_ELBOW, (int)Info.LEFT_WRIST },
-            {(int)Info.LEFT_ELBOW, (int)Info.LEFT_WRIST, (int)Info.LEFT_HAND },
-            {(int)Info.NECK, (int)Info.TORSO, (int)Info.WAIST },
-            {(int)Info.RIGHT_HIP, (int)Info.WAIST, (int)Info.LEFT_HIP },
-            {(int)Info.NECK, (int)Info.RIGHT_SHOULDER, (int)Info.RIGHT_ELBOW },
-            {(int)Info.RIGHT_SHOULDER, (int)Info.RIGHT_ELBOW, (int)Info.RIGHT_WRIST },
-            {(int)Info.RIGHT_ELBOW, (int)Info.RIGHT_WRIST, (int)Info.RIGHT_HAND},
-            {(int)Info.WAIST, (int)Info.RIGHT_HIP, (int)Info.RIGHT_KNEE },
-            {(int)Info.RIGHT_HIP, (int)Info.RIGHT_KNEE, (int)Info.RIGHT_ANKLE },
-            {(int)Info.WAIST, (int)Info.LEFT_HIP, (int)Info.LEFT_KNEE },
-            {(int)Info.LEFT_HIP, (int)Info.LEFT_KNEE, (int)Info.LEFT_ANKLE}
-        };
-        */
-
+        int[,] angleInfo = new int[6, 3]
+       {
+            { (int)Info.LEFT_SHOULDER, (int)Info.LEFT_ELBOW, (int)Info.LEFT_WRIST },
+            { (int)Info.LEFT_ELBOW, (int)Info.LEFT_SHOULDER, (int)Info.LEFT_HIP },
+            { (int)Info.HEAD, (int)Info.NECK, (int)Info.TORSO },
+            { (int)Info.NECK, (int)Info.WAIST, (int)Info.RIGHT_KNEE },
+            { (int)Info.LEFT_KNEE, (int)Info.WAIST, (int)Info.RIGHT_KNEE},
+            { (int)Info.LEFT_SHOULDER, (int)Info.LEFT_KNEE, (int)Info.LEFT_ANKLE }
+       };
 
         /* Angle info class */
         MyAngle _myAngle = new MyAngle();
 
-
         protected override void OnPaint(PaintEventArgs args)
         {
+            int exit_cnt = 0;
+
             base.OnPaint(args);
 
             // Update Nuitrack data. Data will be synchronized with skeleton time stamps.
@@ -397,6 +393,48 @@ namespace nuitrack
             // Draw skeleton joints
             if (_skeletonData != null)
             {
+
+                Database_set();
+                using (conn = new MySqlConnection(DB_INFO))
+                {
+                    if (conn.State != System.Data.ConnectionState.Open)
+                    {
+                        conn.Open();
+                    }
+
+
+                    /*
+                     * If not exist database of userId, DB creation
+                     * If exist, skip
+                     */
+                    try
+                    {
+                        string create_sql = "CREATE TABLE IF NOT EXISTS " + this.TBL_NAME + "(" +
+                            "TYPE VARCHAR(10) NOT NULL, " +
+                            "ANGLE INT NOT NULL, " +
+                            "TIME VARCHAR(40) NOT NULL" +
+                            ")";
+                        MySqlCommand create_cmd = new MySqlCommand(create_sql, conn);
+                        create_cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("CREATE TABLE USER_ID error!");
+                        MessageBox.Show(ex.Message);
+                        MessageBox.Show(ex.StackTrace);
+                    }
+                    finally
+                    {
+                        //Console.WriteLine("CREATE TABLE IF NOT EXISTS Success.");
+                        conn.Close();
+                    }
+                }
+
+                if (conn.State == System.Data.ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+
                 const int jointSize = 10;
                 foreach (var skeleton in _skeletonData.Skeletons)
                 {
@@ -421,35 +459,53 @@ namespace nuitrack
                     }
 
 
-                    // print the data at 1(sec) intervals
+                    // print the data at about 1(sec) intervals
                     if (myCnt >= 1000)
                     {
-                        int temp = (int)(GetJointAngle.AngleBetweenJoints(_myAngle._myJoint[(int)Info.RIGHT_WRIST], _myAngle._myJoint[(int)Info.NECK], _myAngle._myJoint[(int)Info.WAIST]));
+                        int temp = (int)(GetJointAngle.AngleBetweenJoints
+                            (
+                            _myAngle._myJoint[angleInfo[this.SET_NUM, 0]],
+                            _myAngle._myJoint[angleInfo[this.SET_NUM, 1]],
+                            _myAngle._myJoint[angleInfo[this.SET_NUM, 2]]
+                            )
+                            );
 
-                        //TBL_NAME = user_id;
-                        TBL_NAME = "test";
-
-                        Database_set();
-
-                        try
+                        using (conn = new MySqlConnection(DB_INFO))
                         {
-                            using (conn = new MySqlConnection(DB_INFO))
+                            if (conn.State != System.Data.ConnectionState.Open)
                             {
-                                
+                                conn.Open();
                             }
 
-                            string sql = "INSERT INTO " + TBL_NAME + " VALUES(" +
-                                temp +
-                                ")";
-                            MySqlCommand cmd = new MySqlCommand(sql, conn);
-                            cmd.Connection.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("MySQL connection error!");
-                            MessageBox.Show(ex.Message);
-                            MessageBox.Show(ex.StackTrace);
+                            string date = DateTime.Now.ToString();
+
+                            try
+                            {
+                                string sql = "INSERT INTO " + TBL_NAME + " VALUES(" +
+                                    "'" + "SET " + SET_NUM + "'" + "," +
+                                    "'" + temp + "'" + "," +
+                                    "'" + (DateTime.Now.ToLongDateString()) + "'" +
+                                    ")";
+                                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                                //cmd.Connection.Open();
+                                cmd.ExecuteNonQuery();
+                                
+                                if(exit_cnt++ >= 3)
+                                {
+                                    Application.Exit();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("MySQL connection error!");
+                                MessageBox.Show(ex.Message);
+                                MessageBox.Show(ex.StackTrace);
+                            }
+                            finally
+                            {
+                                //Console.WriteLine("INSERT INTO TBL VALUES() Success.");
+                                conn.Close();
+                            }
                         }
 
                         Console.WriteLine(temp + " DB Insert !");
