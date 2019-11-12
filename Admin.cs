@@ -82,12 +82,13 @@ namespace JointAngle_combine
         {
             bool chk = true;
 
-            string argv = "";
-            if (set1_radio.Checked) argv = "SET1";
-            else if (set2_radio.Checked) argv = "SET2";
-            else if (set3_radio.Checked) argv = "SET3";
-            else if (set4_radio.Checked) argv = "SET4";
-            else if (set5_radio.Checked) argv = "SET5";
+            int opt = 0;
+            if (set1_radio.Checked) opt = 1;
+            else if (set2_radio.Checked) opt = 2;
+            else if (set3_radio.Checked) opt = 3;
+            else if (set4_radio.Checked) opt = 4;
+            else if (set5_radio.Checked) opt = 5;
+            else if (set6_radio.Checked) opt = 6;
             else
             {
                 MessageBox.Show("아이디를 입력해야 합니다!");
@@ -138,11 +139,11 @@ namespace JointAngle_combine
                 SpeechSynthesizer ts = new SpeechSynthesizer();
                 ts.SelectVoice("Microsoft Server Speech Text to Speech Voice (ko-KR, Heami)");
                 ts.SetOutputToDefaultAudioDevice();
-                ts.Speak(argv + "의 측정을 시작합니다!");
+                ts.Speak("SET " + opt + "의 측정을 시작합니다!");
 
                 // Mesure program start 
-                string path = @"C:\Users\devLupin\NuitrackSDK\Examples\csharp_test\build\nuitrack_csharp_sample.exe";
-                string argument = this.userID + " " + argv;
+                string path = @"C:\Users\devLupin\NuitrackSDK\Examples\nuitrack_measure_release\nuitrack_measure_release.exe";
+                string argument = this.userID + " " + opt;
 
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {

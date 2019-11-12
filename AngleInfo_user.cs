@@ -21,7 +21,7 @@ namespace JointAngle_combine
          * <-------- List -------->
          * SET1 ~ SET5, Current time
          */
-        const int NUM_OF_CULUMNS = 6;
+        const int NUM_OF_CULUMNS = 3;
 
         string userID = "";
         string userPW = "";
@@ -33,7 +33,7 @@ namespace JointAngle_combine
 
 
         // Index number setting
-        enum DB_NUM { SET1, SET2, SET3, SET4, SET5, TIME };
+        enum DB_NUM { TYPE, ANGLE, TIME };
 
         //Set the database info
         private void Database_set()
@@ -52,14 +52,12 @@ namespace JointAngle_combine
             this.Controls.Add(AngleInfo);
 
             // Num of columns
-            AngleInfo.ColumnCount = NUM_OF_CULUMNS;
+            AngleInfo.ColumnCount = 3;
 
             // Set the columns name
-            for (int column_cnt = 0; column_cnt < AngleInfo.ColumnCount - 1; column_cnt++)
-            {
-                AngleInfo.Columns[column_cnt].Name = "SET " + (column_cnt + 1);
-            }
-            AngleInfo.Columns[AngleInfo.ColumnCount - 1].Name = "측정일자";
+            AngleInfo.Columns[(int)DB_NUM.TYPE].Name = "타입";
+            AngleInfo.Columns[(int)DB_NUM.ANGLE].Name = "각도";
+            AngleInfo.Columns[(int)DB_NUM.TIME].Name = "측정일자";
         }
 
         private void PopulateDataGridView()
@@ -84,12 +82,9 @@ namespace JointAngle_combine
                 try
                 {
                     string create_sql = "CREATE TABLE IF NOT EXISTS " + this.userID + " (" +
-                        "SET1 INT NOT NULL, " +
-                        "SET2 INT NOT NULL, " +
-                        "SET3 INT NOT NULL, " +
-                        "SET4 INT NOT NULL, " +
-                        "SET5 INT NOT NULL, " +
-                        "TIME DATETIME NOT NULL" +
+                        "TYPE VARCHAR(10) NOT NULL, " +
+                        "ANGLE INT NOT NULL, " +
+                        "TIME VARCHAR(40) NOT NULL" +
                         ")";
                     MySqlCommand create_cmd = new MySqlCommand(create_sql, conn);
                     create_cmd.ExecuteNonQuery();
@@ -113,16 +108,13 @@ namespace JointAngle_combine
                     while (rdr.Read())
                     {
                         // Set Angle data & curTime;
-                        row[(int)DB_NUM.SET1] = rdr["SET1"].ToString();
-                        row[(int)DB_NUM.SET2] = rdr["SET2"].ToString();
-                        row[(int)DB_NUM.SET3] = rdr["SET3"].ToString();
-                        row[(int)DB_NUM.SET4] = rdr["SET4"].ToString();
-                        row[(int)DB_NUM.SET5] = rdr["SET5"].ToString();
+                        row[(int)DB_NUM.TYPE] = rdr["TYPE"].ToString();
+                        row[(int)DB_NUM.ANGLE] = rdr["ANGLE"].ToString();
                         row[(int)DB_NUM.TIME] = DateTime.Now.ToString();    // current time.
 
                         // Show Data on DataGridView
                         AngleInfo.Rows.Add(
-                            row[(int)DB_NUM.SET1], row[(int)DB_NUM.SET2], row[(int)DB_NUM.SET3], row[(int)DB_NUM.SET4], row[(int)DB_NUM.SET5], row[(int)DB_NUM.TIME]
+                            row[(int)DB_NUM.TYPE], row[(int)DB_NUM.ANGLE], row[(int)DB_NUM.TIME]
                             );
                     }
                     rdr.Close();
