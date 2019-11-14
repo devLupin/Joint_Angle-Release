@@ -149,5 +149,9 @@ namespace JointAngle_combine
             SetupDataGridView();
             PopulateDataGridView();
         }
+        ~AngleInfo_user()
+        {
+            this.Dispose();
+        }
     }
 }

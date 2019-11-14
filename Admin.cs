@@ -77,6 +77,10 @@ namespace JointAngle_combine
         {
             InitializeComponent();
         }
+        ~Admin()
+        {
+            this.Dispose();
+        }
 
         private void measureStart_btn_Click(object sender, EventArgs e)
         {
@@ -139,7 +143,7 @@ namespace JointAngle_combine
                 SpeechSynthesizer ts = new SpeechSynthesizer();
                 ts.SelectVoice("Microsoft Server Speech Text to Speech Voice (ko-KR, Heami)");
                 ts.SetOutputToDefaultAudioDevice();
-                ts.Speak("SET " + opt + "의 측정을 시작합니다!");
+                ts.Speak("세트 " + opt + "의 측정을 시작합니다!");
 
                 // Mesure program start 
                 string path = @"C:\Users\devLupin\NuitrackSDK\Examples\nuitrack_measure_release\nuitrack_measure_release.exe";

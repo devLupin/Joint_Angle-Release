@@ -86,6 +86,8 @@ namespace JointAngle_combine
 
                 if (chk)
                 {
+                    this.Hide();
+
                     AngleInfo_user user = new AngleInfo_user(id_txt.Text, pw_txt.Text);
                     user.Show();
                 }
@@ -95,6 +97,8 @@ namespace JointAngle_combine
             {
                 if(id_txt.Text.Equals("admin") && pw_txt.Text.Equals("gstc4900"))
                 {
+                    this.Hide();
+
                     Admin admin = new Admin();
                     admin.Show();
                 }
