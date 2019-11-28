@@ -412,7 +412,7 @@ namespace nuitrack
                         string create_sql = "CREATE TABLE IF NOT EXISTS " + this.TBL_NAME + "(" +
                             "TYPE VARCHAR(10) NOT NULL, " +
                             "ANGLE INT NOT NULL, " +
-                            "TIME VARCHAR(40) NOT NULL" +
+                            "TIME DATETIME NOT NULL" +
                             ")";
                         MySqlCommand create_cmd = new MySqlCommand(create_sql, conn);
                         create_cmd.ExecuteNonQuery();
@@ -477,14 +477,15 @@ namespace nuitrack
                                 conn.Open();
                             }
 
-                            string date = DateTime.Now.ToString();
+                            DateTime now = DateTime.Now;
+                            string date = now.ToString("yyyy-MM-dd H:mm:ss");
 
                             try
                             {
                                 string sql = "INSERT INTO " + TBL_NAME + " VALUES(" +
                                     "'" + "SET " + SET_NUM + "'" + "," +
                                     "'" + temp + "'" + "," +
-                                    "'" + (DateTime.Now.ToLongDateString()) + "'" +
+                                    "'" + date + "'" +
                                     ")";
                                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                                 //cmd.Connection.Open();
