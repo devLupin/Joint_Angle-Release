@@ -57,6 +57,11 @@ namespace JointAngle_combine
                 string picture_path = @"C:\Users\devLupin\Source\Repos\JointAngle_combine\JointAngle_combine\set_pictures\" + whatPicture + ".jpg";
                 Picture picture = new Picture(picture_path);
                 picture.Show();
+
+                SpeechSynthesizer ts = new SpeechSynthesizer();
+                ts.SelectVoice("Microsoft Server Speech Text to Speech Voice (ko-KR, Heami)");
+                ts.SetOutputToDefaultAudioDevice();
+                ts.Speak("사진과 같은 포즈를 취해주세요! 모든 측정이 끝나면 창을 닫고 측정시작을 클릭해주세요.");
             }
         }
 
