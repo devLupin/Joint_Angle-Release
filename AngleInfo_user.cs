@@ -19,7 +19,7 @@ namespace JointAngle_combine
          * Set num of field
          * 
          * <-------- List -------->
-         * SET1 ~ SET5, Current time
+         * SET1 ~ SET6, Current time
          */
         const int NUM_OF_CULUMNS = 3;
 

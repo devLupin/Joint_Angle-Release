@@ -45,6 +45,7 @@ namespace JointAngle_combine
             else if (set3_radio.Checked) whatPicture = 3;
             else if (set4_radio.Checked) whatPicture = 4;
             else if (set5_radio.Checked) whatPicture = 5;
+            else if (set6_radio.Checked) whatPicture = 6;
             else
             {
                 chk = false;
